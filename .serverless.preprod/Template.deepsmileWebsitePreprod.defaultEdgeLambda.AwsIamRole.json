@@ -1,0 +1,9 @@
+{
+  "name": "2pte3au-ivkf3jw",
+  "arn": "arn:aws:iam::009032792877:role/2pte3au-ivkf3jw",
+  "service": ["lambda.amazonaws.com", "edgelambda.amazonaws.com"],
+  "policy": {
+    "arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  },
+  "region": "us-east-1"
+}

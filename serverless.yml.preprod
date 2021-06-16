@@ -1,0 +1,12 @@
+deepsmileWebsitePreprod:
+  component: "@sls-next/serverless-component@1.18.0"
+  stage: preprod
+  inputs:
+    build:
+      cmd: "npm"
+      args: ["run", "build"]
+    stage: preprod
+    description: "FRONT-DeepSmile-*lambda-type*@Edge Next CloudFront PREPROD"
+    bucketName: "front-deepsmile-serverless-nextjs-preprod"
+    bucketRegion: "eu-west-3"
+    region: "eu-west-3"

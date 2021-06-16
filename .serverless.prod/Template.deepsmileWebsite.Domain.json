@@ -1,0 +1,13 @@
+{
+  "region": "us-east-1",
+  "privateZone": false,
+  "domain": "udini.co",
+  "subdomains": [
+    {
+      "domain": "www.udini.co",
+      "distributionId": "EH1FV98HRQVPS",
+      "url": "https://d2t3ydqmcmoyzp.cloudfront.net",
+      "type": "awsCloudFront"
+    }
+  ]
+}

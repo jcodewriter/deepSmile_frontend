@@ -1,0 +1,17 @@
+{
+  "name": "81e81-n4eawdg",
+  "hash": "ezTtttcAwwUuOHP2zgDpuf3r9ob7yV3iBFlpqj5LusE=",
+  "description": "FRONT-DeepSmile-*lambda-type*@Edge for Next CloudFront distribution",
+  "memory": 512,
+  "timeout": 10,
+  "code": "/Users/cyriltrosset/Dev/React/FRONT---DeepSmile-Website---Next.js/.serverless_nextjs/default-lambda",
+  "shims": [],
+  "handler": "index.handler",
+  "runtime": "nodejs12.x",
+  "env": {},
+  "role": {
+    "arn": "arn:aws:iam::009032792877:role/81e81-b9n2hgc"
+  },
+  "arn": "arn:aws:lambda:us-east-1:009032792877:function:81e81-n4eawdg",
+  "region": "us-east-1"
+}

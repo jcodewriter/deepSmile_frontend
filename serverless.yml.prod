@@ -1,0 +1,20 @@
+deepsmileWebsite:
+  component: "@sls-next/serverless-component@1.18.0"
+  stage: prod
+  inputs:
+    build:
+      cmd: "npm"
+      args: ["run", "build:prod"]
+    stage: prod
+    cloudfront:
+      defaults:
+        forward:
+          headers: [Host]
+    domain: ["udini.co"]
+    domainType: "both"
+    domainRedirects:
+      udini.co: https://www.udini.co
+    description: "FRONT-DeepSmile-*lambda-type*@Edge for Next CloudFront distribution"
+    bucketName: "front-deepsmile-serverless-nextjs"
+    bucketRegion: "eu-west-3"
+    region: "eu-west-3"

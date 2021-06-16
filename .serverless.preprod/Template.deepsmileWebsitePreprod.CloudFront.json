@@ -1,0 +1,52 @@
+{
+  "id": "E3GGHK0259MQAB",
+  "arn": "arn:aws:cloudfront::009032792877:distribution/E3GGHK0259MQAB",
+  "url": "https://dgv6gdq7k1yjx.cloudfront.net",
+  "region": "us-east-1",
+  "enabled": true,
+  "comment": "",
+  "priceClass": "PriceClass_All",
+  "origins": [
+    {
+      "url": "http://front-deepsmile-serverless-nextjs-preprod.s3.eu-west-3.amazonaws.com",
+      "private": true,
+      "pathPatterns": {
+        "_next/static/*": {
+          "ttl": 86400,
+          "forward": {
+            "headers": "none",
+            "cookies": "none",
+            "queryString": false
+          }
+        },
+        "static/*": {
+          "ttl": 86400,
+          "forward": {
+            "headers": "none",
+            "cookies": "none",
+            "queryString": false
+          }
+        },
+        "_next/data/*": {
+          "ttl": 0,
+          "allowedHttpMethods": ["HEAD", "GET"],
+          "lambda@edge": {
+            "origin-request": "arn:aws:lambda:us-east-1:009032792877:function:2pte3au-5t32e5f:1"
+          }
+        }
+      }
+    }
+  ],
+  "defaults": {
+    "ttl": 0,
+    "forward": {
+      "cookies": "all",
+      "queryString": true
+    },
+    "allowedHttpMethods": ["HEAD", "GET"],
+    "lambda@edge": {
+      "origin-request": "arn:aws:lambda:us-east-1:009032792877:function:2pte3au-5t32e5f:1"
+    },
+    "compress": true
+  }
+}

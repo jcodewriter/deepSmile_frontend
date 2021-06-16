@@ -1,0 +1,6 @@
+{
+  "name": "front-deepsmile-serverless-nextjs",
+  "region": "eu-west-3",
+  "accelerated": true,
+  "url": "https://front-deepsmile-serverless-nextjs.s3.amazonaws.com"
+}

@@ -1,0 +1,92 @@
+name: Deploy prod workflow
+
+on:
+  push:
+    tags:
+      - prod
+
+jobs:
+  #  cleaner:
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Runner workspace path
+  #        run: |
+  #          echo "Cleaning up previous run"
+  #          sudo rm -rf "${{ github.workspace }}"
+
+  deploy-prod:
+    #needs: cleaner
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Wait for versionning
+      #   uses: fountainhead/action-wait-for-check@v1.0.0 # L'action utilisé
+      #   id: wait-for-versionning # Id (permet de récupérer les résultats)
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }} # Votre clé secrète personnel :p
+      #     checkName: bump-version # Nom du job à attendre (trouve aussi les jobs des autres workflows)
+      #     ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      #     intervalSeconds: 10 # Intervale entre les requêtes
+      #     timeoutSeconds: 30 # Temps avant le timeout
+
+      # - name: Do something with a success job
+      #   if: steps.wait-for-versionning.outputs.conclusion == 'success'
+      #   run: echo success && true
+
+      # - name: Do something with a failed job
+      #   if: steps.wait-for-versionning.outputs.conclusion == 'failure'
+      #   run: echo fail && false
+
+      # - name: Do something with a timeout job
+      #   if: steps.wait-for-versionning.outputs.conclusion == 'timed_out'
+      #   run: echo Timeout !
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Add git secret to sources list
+        run: echo "deb https://dl.bintray.com/sobolevn/deb git-secret main" | sudo tee -a /etc/apt/sources.list
+
+      - name: Add maintainer public key
+        run: wget -q -O- --no-check-certificate https://api.bintray.com/users/sobolevn/keys/gpg/public.key | sudo apt-key add -
+
+      - name: Install git-secret
+        run: sudo apt-get update && sudo apt-get install git-secret
+
+      - name: Import private key
+        shell: bash
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: gpg --batch --import <(echo "$GPG_PRIVATE_KEY")
+
+      - name: Reveal secrets
+        run: git secret reveal -v -f -p ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Get project version
+        id: vars
+        run: |
+          VERSION=$(node -pe "require('./package.json').version")
+          echo ::set-output name=tag::$VERSION
+
+      - name: Get commit short hash
+        id: short_sha
+        run: echo "::set-output name=short_sha::$(git rev-parse --short HEAD)"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare serverless PROD files
+        run: cp serverless.yml.prod serverless.yml && cp -R .serverless.prod .serverless
+
+      - name: serverless deploy
+        uses: serverless/github-action@master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.SERVERLESS_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SERVERLESS_AWS_SECRET_ACCESS_KEY }}
+
+      - name: Workflow status to slack
+        uses: act10ns/slack@v1
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: ${{ job.status }}
+        if: always()
